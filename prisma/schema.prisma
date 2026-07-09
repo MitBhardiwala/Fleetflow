@@ -1,0 +1,98 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  SUPER_ADMIN
+  FLEET_MANAGER
+  DISPATCHER
+  SAFETY_OFFICER
+  FINANCIAL_ANALYST
+}
+
+enum LicenseCategory {
+  TRUCK
+  VAN
+  BIKE
+}
+
+enum DriverStatus {
+  ON_DUTY
+  OFF_DUTY
+  ON_TRIP
+  SUSPENDED
+}
+
+enum VehicleType {
+  TRUCK
+  VAN
+  BIKE
+}
+
+enum VehicleStatus {
+  AVAILABLE
+  ON_TRIP
+  IN_SHOP
+  OUT_OF_SERVICE
+}
+
+model User {
+  id           String  @id @default(uuid())
+  email        String  @unique @db.VarChar(100)
+  passwordHash String  @map("password_hash") @db.VarChar(255)
+  firstName    String  @db.VarChar(100)
+  lastName     String? @db.VarChar(100)
+  role         Role
+  isActive     Boolean @default(true) @map("is_active")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model Driver {
+  id                String          @id @default(uuid())
+  firstName         String          @map("first_name") @db.VarChar(100)
+  lastName          String?         @map("last_name") @db.VarChar(100)
+  phone             String          @unique @db.Char(10)
+  licenseNumber     String          @unique @map("license_number") @db.VarChar(50)
+  licenseExpiryDate DateTime        @map("license_expiry_date") @db.Date
+  licenseCategory   LicenseCategory @map("license_category")
+  status            DriverStatus    @default(OFF_DUTY)
+  safetyScore       Decimal         @default(100.00) @map("safety_score") @db.Decimal(5, 2)
+  totalTrips        Int             @default(0) @map("total_trips")
+  completedTrips    Int             @default(0) @map("completed_trips")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("drivers")
+}
+
+model Vehicle {
+  id                String        @id @default(uuid())
+  name              String        @db.VarChar(100)
+  model             String?       @db.VarChar(100)
+  licensePlate      String        @unique @map("license_plate") @db.VarChar(20)
+  type              VehicleType
+  maxLoadCapacityKg Decimal       @map("max_load_capacity_kg") @db.Decimal(10, 2)
+  currentOdometerKm Decimal       @default(0) @map("current_odometer_km") @db.Decimal(10, 2)
+  status            VehicleStatus @default(AVAILABLE)
+  acquisitionCost   Decimal?      @map("acquisition_cost") @db.Decimal(12, 2)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("vehicles")
+}

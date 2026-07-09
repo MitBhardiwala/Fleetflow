@@ -1,0 +1,55 @@
+import { NextFunction, Request, Response } from "express";
+import { createuser, getUser, listUser } from "../services/user.services";
+import { STATUS_CODES } from "../utils/constants";
+import {
+  CreateUserSchemaType,
+  ListUserQuerySchemaType,
+} from "../utils/validations";
+
+export const create = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const newUser = await createuser(req.validatedBody as CreateUserSchemaType);
+
+    res.status(STATUS_CODES.CREATED).json({
+      success: true,
+      message: "User created successfully",
+      data: newUser,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const list = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const data = await listUser(req.validatedQuery as ListUserQuerySchemaType);
+
+    return res.status(STATUS_CODES.OK).json({
+      success: true,
+      message: "User listed successfully",
+      data,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const get = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.validatedParams as { id: string };
+
+    const data = await getUser(id);
+
+    return res.status(STATUS_CODES.OK).json({
+      success: true,
+      message: "User data fetched successfully",
+      data,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
