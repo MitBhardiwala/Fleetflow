@@ -15,6 +15,7 @@ app.get("/status", (_req: Request, res: Response) => {
   });
 });
 
+
 app.use("/api/v1", v1Routes);
 
 app.use(errorHandler);

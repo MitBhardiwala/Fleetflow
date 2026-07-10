@@ -46,6 +46,13 @@ enum VehicleStatus {
   OUT_OF_SERVICE
 }
 
+enum TripStatus {
+  DRAFT
+  DISPATCHED
+  COMPLETED
+  CANCELLED
+}
+
 model User {
   id           String  @id @default(uuid())
   email        String  @unique @db.VarChar(100)
@@ -57,6 +64,7 @@ model User {
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+  trips     Trip[]
 
   @@map("users")
 }
@@ -76,6 +84,7 @@ model Driver {
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+  trips     Trip[]
 
   @@map("drivers")
 }
@@ -93,6 +102,34 @@ model Vehicle {
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+  trips     Trip[]
 
   @@map("vehicles")
+}
+
+model Trip {
+  id                 String     @id @default(uuid())
+  vehicleId          String     @map("vehicle_id")
+  driverId           String    @map("driver_id")
+  cargoDescription   String?    @map("cargo_description") @db.Text
+  cargoWeightKg      Decimal    @map("cargo_weight_kg") @db.Decimal(10, 2)
+  origin             String     @db.VarChar(255)
+  destination        String     @db.VarChar(255)
+  plannedDeparture   DateTime?  @map("planned_departure")
+  actualStart        DateTime?  @map("actual_start")
+  actualEnd          DateTime?  @map("actual_end")
+  startOdometerKm    Decimal?   @map("start_odometer_km") @db.Decimal(10, 2)
+  endOdometerKm      Decimal?   @map("end_odometer_km") @db.Decimal(10, 2)
+  status             TripStatus @default(DRAFT)
+  revenue            Decimal    @default(0) @db.Decimal(10, 2)
+  cancellationReason String?    @map("cancellation_reason") @db.Text
+  createdBy          String?    @map("created_by")
+  createdAt          DateTime   @default(now()) @map("created_at")
+  updatedAt          DateTime   @updatedAt @map("updated_at")
+
+  vehicle Vehicle @relation(fields: [vehicleId], references: [id])
+  driver  Driver? @relation(fields: [driverId], references: [id])
+  creator User?   @relation(fields: [createdBy], references: [id])
+
+  @@map("trips")
 }
