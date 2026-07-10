@@ -53,6 +53,14 @@ enum TripStatus {
   CANCELLED
 }
 
+enum ServiceType {
+  OIL_CHANGE
+  TIRE_ROTATION
+  BRAKE_SERVICE
+  ENGINE_REPAIR
+  OTHER
+}
+
 model User {
   id           String  @id @default(uuid())
   email        String  @unique @db.VarChar(100)
@@ -62,9 +70,11 @@ model User {
   role         Role
   isActive     Boolean @default(true) @map("is_active")
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  trips     Trip[]
+  createdAt          DateTime            @default(now()) @map("created_at")
+  updatedAt          DateTime            @updatedAt @map("updated_at")
+  trips              Trip[]
+  maintenanceRecords MaintenanceRecord[]
+  fuelLogs           FuelLog[]
 
   @@map("users")
 }
@@ -77,7 +87,7 @@ model Driver {
   licenseNumber     String          @unique @map("license_number") @db.VarChar(50)
   licenseExpiryDate DateTime        @map("license_expiry_date") @db.Date
   licenseCategory   LicenseCategory @map("license_category")
-  status            DriverStatus    @default(OFF_DUTY)
+  status            DriverStatus    @default(ON_DUTY)
   safetyScore       Decimal         @default(100.00) @map("safety_score") @db.Decimal(5, 2)
   totalTrips        Int             @default(0) @map("total_trips")
   completedTrips    Int             @default(0) @map("completed_trips")
@@ -100,9 +110,11 @@ model Vehicle {
   status            VehicleStatus @default(AVAILABLE)
   acquisitionCost   Decimal?      @map("acquisition_cost") @db.Decimal(12, 2)
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  trips     Trip[]
+  createdAt          DateTime            @default(now()) @map("created_at")
+  updatedAt          DateTime            @updatedAt @map("updated_at")
+  trips              Trip[]
+  maintenanceRecords MaintenanceRecord[]
+  fuelLogs           FuelLog[]
 
   @@map("vehicles")
 }
@@ -110,7 +122,7 @@ model Vehicle {
 model Trip {
   id                 String     @id @default(uuid())
   vehicleId          String     @map("vehicle_id")
-  driverId           String    @map("driver_id")
+  driverId           String     @map("driver_id")
   cargoDescription   String?    @map("cargo_description") @db.Text
   cargoWeightKg      Decimal    @map("cargo_weight_kg") @db.Decimal(10, 2)
   origin             String     @db.VarChar(255)
@@ -127,9 +139,47 @@ model Trip {
   createdAt          DateTime   @default(now()) @map("created_at")
   updatedAt          DateTime   @updatedAt @map("updated_at")
 
-  vehicle Vehicle @relation(fields: [vehicleId], references: [id])
-  driver  Driver? @relation(fields: [driverId], references: [id])
-  creator User?   @relation(fields: [createdBy], references: [id])
+  vehicle  Vehicle   @relation(fields: [vehicleId], references: [id])
+  driver   Driver?   @relation(fields: [driverId], references: [id])
+  creator  User?     @relation(fields: [createdBy], references: [id])
+  fuelLogs FuelLog[]
 
   @@map("trips")
+}
+
+model MaintenanceRecord {
+  id          String      @id @default(uuid())
+  vehicleId   String      @map("vehicle_id")
+  serviceType ServiceType @map("service_type")
+  description String?     @db.Text
+  cost        Decimal     @db.Decimal(10, 2)
+  serviceDate DateTime    @map("service_date") @db.Date
+  vendor      String?     @db.VarChar(255)
+  isCompleted Boolean     @default(false) @map("is_completed")
+  createdBy   String      @map("created_by")
+  createdAt   DateTime    @default(now()) @map("created_at")
+
+  vehicle Vehicle @relation(fields: [vehicleId], references: [id])
+  creator User    @relation(fields: [createdBy], references: [id])
+
+  @@map("maintenance_records")
+}
+
+model FuelLog {
+  id               String   @id @default(uuid())
+  vehicleId        String   @map("vehicle_id")
+  tripId           String?  @map("trip_id")
+  liters           Decimal  @db.Decimal(10, 3)
+  costPerLiter     Decimal  @map("cost_per_liter") @db.Decimal(10, 4)
+  totalCost        Decimal  @map("total_cost") @db.Decimal(10, 2)
+  odometerAtFillKm Decimal? @map("odometer_at_fill_km") @db.Decimal(10, 2)
+  fuelDate         DateTime @map("fuel_date") @db.Date
+  createdBy        String   @map("created_by")
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  vehicle Vehicle @relation(fields: [vehicleId], references: [id])
+  trip    Trip?   @relation(fields: [tripId], references: [id])
+  creator User    @relation(fields: [createdBy], references: [id])
+
+  @@map("fuel_logs")
 }

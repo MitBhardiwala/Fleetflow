@@ -1,8 +1,5 @@
 import { Prisma } from "../../generated/prisma/client";
-import {
-  DriverCreateInput,
-  DriverWhereUniqueInput,
-} from "../../generated/prisma/models";
+
 import { prisma } from "../db";
 
 interface FindManyParams {
@@ -14,10 +11,13 @@ interface FindManyParams {
 }
 
 export const driverRepository = {
-  create: (data: DriverCreateInput) => {
+  create: (data: Prisma.DriverCreateInput) => {
     return prisma.driver.create({ data });
   },
-  findUnique: async (where: DriverWhereUniqueInput) => {
+  findFirst: (where: Prisma.DriverWhereInput) => {
+    return prisma.driver.findFirst({ where });
+  },
+  findUnique: async (where: Prisma.DriverWhereUniqueInput) => {
     return prisma.driver.findUnique({ where });
   },
   findMany: ({ where, orderBy, select, skip, take }: FindManyParams) => {
@@ -43,5 +43,11 @@ export const driverRepository = {
       prisma.driver.findMany({ where, orderBy, select, skip, take }),
       prisma.driver.count({ where }),
     ]);
+  },
+  update: (
+    where: Prisma.DriverWhereUniqueInput,
+    data: Prisma.DriverUpdateInput,
+  ) => {
+    return prisma.driver.update({ where, data });
   },
 };

@@ -1,4 +1,5 @@
 import { Prisma } from "../../generated/prisma/client";
+import { TripUpdateInput } from "../../generated/prisma/models";
 import { prisma } from "../db";
 
 interface FindManyParams {
@@ -13,6 +14,9 @@ interface FindManyParams {
 export const tripRepository = {
   create: (data: Prisma.TripUncheckedCreateInput) => {
     return prisma.trip.create({ data });
+  },
+  findUnique: (where: Prisma.TripWhereUniqueInput) => {
+    return prisma.trip.findUnique({ where });
   },
   findMany: ({ where, orderBy, select, skip, take }: FindManyParams) => {
     return prisma.trip.findMany({
@@ -29,13 +33,16 @@ export const tripRepository = {
   findManyWithCount: ({
     where,
     orderBy,
-    include,
     skip,
+    include,
     take,
   }: FindManyParams) => {
     return prisma.$transaction([
-      prisma.trip.findMany({ where, orderBy, include, skip, take }),
+      prisma.trip.findMany({ where, orderBy, skip, take, include }),
       prisma.trip.count({ where }),
     ]);
+  },
+  update: (where: Prisma.TripWhereUniqueInput, data: TripUpdateInput) => {
+    return prisma.trip.update({ where, data });
   },
 };

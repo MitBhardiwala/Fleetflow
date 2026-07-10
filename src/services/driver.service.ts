@@ -19,14 +19,14 @@ export const createDriverService = async (data: CreateDriverSchemaType) => {
     safetyScore,
   } = data;
   // create if driver already exists
-  const existingDriver = await driverRepository.findUnique({
-    phone: data.phone,
+  const existingDriver = await driverRepository.findFirst({
+    OR: [{ phone: data.phone }, { licenseNumber: data.licenseNumber }],
   });
 
   if (existingDriver) {
     throw new AppError(
       STATUS_CODES.CONFLICT,
-      "Driver with this phone number already exists",
+      "Driver with this phone number or license number already exists",
     );
   }
 

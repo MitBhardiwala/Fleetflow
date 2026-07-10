@@ -13,14 +13,14 @@ export const validate =
   (schemas: ValidationSchemas) =>
   (req: Request, _res: Response, next: NextFunction) => {
     try {
-      if (schemas.body) {
-        req.validatedBody = schemas.body.parse(req.body);
-      }
       if (schemas.params) {
         req.validatedParams = schemas.params.parse(req.params);
       }
       if (schemas.query) {
         req.validatedQuery = schemas.query.parse(req.query);
+      }
+      if (schemas.body) {
+        req.validatedBody = schemas.body.parse(req.body);
       }
       next();
     } catch (error) {

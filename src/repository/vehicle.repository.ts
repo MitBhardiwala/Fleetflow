@@ -40,4 +40,10 @@ export const vehicleRepository = {
   create: (data: Prisma.VehicleCreateInput) => {
     return prisma.vehicle.create({ data });
   },
+  update: (
+    where: Prisma.VehicleWhereUniqueInput,
+    data: Prisma.VehicleUpdateInput,
+  ) => {
+    return prisma.vehicle.update({ where, data });
+  },
 };
