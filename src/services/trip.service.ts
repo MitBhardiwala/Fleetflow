@@ -26,6 +26,7 @@ import { prisma } from "../db";
 export const createTripService = async (data: CreateTripSchemaType) => {
   const { vehicleId, driverId } = data;
 
+  // TODO neeed to add createtdBy here
   await validateTripCreation(vehicleId, driverId, data.cargoWeightKg);
 
   return tripRepository.create(data);

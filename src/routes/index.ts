@@ -6,6 +6,7 @@ import vehicleRoutes from "./vehicle.route";
 import tripRoutes from "./trip.route";
 import maintainenceRoutes from "./maintainence.route";
 import fuelLogRoutes from "./fuel-log.route";
+import incidentRoutes from "./incident.route";
 import { authenticateToken } from "../middleware/authenticate";
 
 const router = express.Router();
@@ -32,5 +33,8 @@ router.use("/maintenance", maintainenceRoutes);
 
 //Fuel Log routes
 router.use("/fuel-logs", fuelLogRoutes);
+
+//Incident routes
+router.use("/incidents", incidentRoutes);
 
 export default router;

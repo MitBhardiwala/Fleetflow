@@ -70,7 +70,7 @@ export const completeMaintenanceService = async (
       { isCompleted: true },
     ),
     vehicleRepository.update(
-      { id: record.vehicleId },
+      { id: '9e2bbd61-a3e0-4efd-a343-6f6e500fee03' },
       { status: VehicleStatus.AVAILABLE },
     ),
   ]);

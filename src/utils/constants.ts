@@ -16,3 +16,10 @@ export const paginationSchema = z.object({
   page: z.coerce.number().int().positive().default(1),
   perPage: z.coerce.number().int().positive().max(100).default(10),
 });
+
+// incident serverity meta
+export const SCORE_DEDUCTION = {
+  'LOW': 5,
+  'MEDIUM': 15,
+  'HIGH': 25
+}

@@ -7,6 +7,8 @@ import {
   TripStatus,
   VehicleStatus,
   VehicleType,
+  IncidentType,
+  Severity,
 } from "../../generated/prisma/enums";
 import { paginationSchema } from "./constants";
 
@@ -406,7 +408,37 @@ export const listFuelLogSchema = paginationSchema.extend({
   sortOn: z
     .enum(["vehicle", "totalCost", "fuelDate", "createdAt"])
     .default("createdAt"),
-  sortOrder: z.enum(["asc", "desc"]).default("desc"),
+  sortOrder: z.enum(["asc", "desc"]).default("asc"),
 });
 
 export type ListFuelLogSchemaType = z.infer<typeof listFuelLogSchema>;
+
+export const createIncidentSchema = z.object({
+  driverId: z
+    .string({
+      error: (iss) =>
+        iss.input === undefined
+          ? "Driver Id is required"
+          : "Driver Id must be a valid string",
+    })
+    .uuid("Invalid driver UUID"),
+  tripId: z.string().uuid("Invalid trip UUID").optional(),
+  incidentType: z.enum(IncidentType),
+  severity: z.enum(Severity),
+  incidentDate: z.coerce.date("Valid incident date is required"),
+});
+
+export type CreateIncidentSchemaType = z.infer<typeof createIncidentSchema>;
+
+export const listIncidentSchema = paginationSchema.extend({
+  search: z.string().trim().optional(),
+  driverId: z.string().uuid("Invalid UUID format").optional(),
+  tripId: z.string().uuid("Invalid UUID format").optional(),
+  sortOn: z
+    .enum(["driver", "incidentDate", "severity", "createdAt"])
+    .default("createdAt"),
+  sortOrder: z.enum(["asc", "desc"]).default("asc"),
+});
+
+export type ListIncidentSchemaType = z.infer<typeof listIncidentSchema>;
+
