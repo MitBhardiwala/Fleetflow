@@ -4,8 +4,9 @@ import {
   createDriverSchema,
   getDriverSchema,
   listDriverSchema,
+  updateDriverSchema,
 } from "../utils/validations";
-import { create, get, getById } from "../controllers/driver.controller";
+import { create, get, getById, update, remove } from "../controllers/driver.controller";
 
 const router = express.Router();
 
@@ -26,5 +27,8 @@ router.get(
 );
 
 router.get("/:id", validate({ params: getDriverSchema }), getById);
+router.patch("/:id", validate({ params: getDriverSchema, body: updateDriverSchema }), update);
+
+router.delete("/:id", validate({ params: getDriverSchema }), remove);
 
 export default router;

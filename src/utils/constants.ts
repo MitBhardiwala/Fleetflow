@@ -23,3 +23,10 @@ export const SCORE_DEDUCTION = {
   'MEDIUM': 15,
   'HIGH': 25
 }
+
+
+export const UNIQUE_FIELD_MESSAGES: Record<string, string> = {
+  phone: "This phone number is already registered to another driver.",
+  license_number: "This license number is already registered to another driver.",
+  license_plate: "A vehicle with this license plate already exists.",
+};

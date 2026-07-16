@@ -1,10 +1,11 @@
-import { Prisma } from "../../generated/prisma/client";
+import { DriverStatus, Prisma } from "../../generated/prisma/client";
 import { driverRepository } from "../repository/driver.repository";
 import { STATUS_CODES } from "../utils/constants";
 import { AppError } from "../utils/error";
 import {
   CreateDriverSchemaType,
   listDriverSchemaType,
+  UpdateDriverSchemaType,
 } from "../utils/validations";
 
 export const createDriverService = async (data: CreateDriverSchemaType) => {
@@ -104,4 +105,53 @@ export const getDriverByIdService = async (id: string) => {
   }
 
   return existingDriver;
+};
+export const updateDriverService = async (id: string, data: UpdateDriverSchemaType) => {
+
+  const { status } = data;
+
+  const existingDriver = await driverRepository.findUnique({ id });
+
+  if (!existingDriver) {
+    throw new AppError(STATUS_CODES.NOT_FOUND, "Driver not found");
+  }
+
+  const isStatusChanging = status !== undefined && status !== existingDriver.status;
+
+  if (isStatusChanging) {
+    if (existingDriver.status === DriverStatus.ON_TRIP) {
+      throw new AppError(
+        STATUS_CODES.BAD_REQUEST,
+        "Driver is on trip, status cannot be changed"
+      );
+    }
+
+    if (status === DriverStatus.ON_TRIP) {
+      throw new AppError(
+        STATUS_CODES.BAD_REQUEST,
+        "Driver status cannot be manually set to ON_TRIP"
+      );
+    }
+  }
+
+  return await driverRepository.update({ id }, data);
+
+};
+export const deleteDriverService = async (id: string) => {
+  const existingDriver = await driverRepository.findUnique({ id });
+
+  // cannot delete a driver who is currently on a trip
+  if (existingDriver?.status === DriverStatus.ON_TRIP) {
+    throw new AppError(
+      STATUS_CODES.BAD_REQUEST,
+      "Driver is currently on a trip and cannot be deleted",
+    );
+  }
+
+  const deletedDriver = await driverRepository.update(
+    { id },
+    { status: DriverStatus.SUSPENDED },
+  );
+
+  return deletedDriver;
 };

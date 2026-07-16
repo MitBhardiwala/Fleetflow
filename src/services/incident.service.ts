@@ -1,7 +1,7 @@
 import { prisma } from "../db";
 import { AppError } from "../utils/error";
 import { SCORE_DEDUCTION, STATUS_CODES } from "../utils/constants";
-import { CreateIncidentSchemaType, ListIncidentSchemaType } from "../utils/validations";
+import { CreateIncidentSchemaType, ListIncidentSchemaType, UpdateIncidentSchemaType } from "../utils/validations";
 import { Prisma } from "../../generated/prisma/client";
 import { incidentRepository } from "../repository/incident.repository";
 import { driverRepository } from "../repository/driver.repository";
@@ -132,4 +132,19 @@ export const listIncidentsService = async (query: ListIncidentSchemaType) => {
   };
 
   return { result: incidents, meta };
+};
+
+export const updateIncidentService = async (
+  id: string,
+  data: UpdateIncidentSchemaType,
+) => {
+  const record = await incidentRepository.findUnique({ id });
+
+  if (!record) {
+    throw new AppError(STATUS_CODES.NOT_FOUND, "Incident not found");
+  }
+
+  const updated = await incidentRepository.update({ id }, { ...data });
+
+  return updated;
 };

@@ -4,11 +4,13 @@ import {
   createMaintenanceService,
   completeMaintenanceService,
   listMaintenanceService,
+  updateMaintenanceService,
 } from "../services/maintainence.service";
 import {
   CompleteMaintenanceSchemaType,
   CreateMaintenanceSchemaType,
   ListMaintenanceSchemaType,
+  UpdateMaintenanceSchemaType,
 } from "../utils/validations";
 
 export const create = async (
@@ -60,6 +62,28 @@ export const completeMaintenance = async (
     return res.status(STATUS_CODES.OK).json({
       success: true,
       message: "Maintenance log marked as completed",
+      data,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateMaintenance = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { id } = req.validatedParams as CompleteMaintenanceSchemaType;
+    const data = await updateMaintenanceService(
+      id,
+      req.validatedBody as UpdateMaintenanceSchemaType,
+    );
+
+    return res.status(STATUS_CODES.OK).json({
+      success: true,
+      message: "Maintenance log updated successfully",
       data,
     });
   } catch (error) {

@@ -3,7 +3,11 @@ import { vehicleRepository } from "../repository/vehicle.repository";
 import { tripRepository } from "../repository/trip.repository";
 import { AppError } from "../utils/error";
 import { STATUS_CODES } from "../utils/constants";
-import { CreateFuelLogSchemaType, ListFuelLogSchemaType } from "../utils/validations";
+import {
+  CreateFuelLogSchemaType,
+  ListFuelLogSchemaType,
+  UpdateFuelLogSchemaType,
+} from "../utils/validations";
 import { Prisma } from "../../generated/prisma/client";
 
 export const createFuelLogService = async (
@@ -137,4 +141,57 @@ export const listFuelLogsService = async (query: ListFuelLogSchemaType) => {
   };
 
   return { result: logs, meta };
+};
+
+export const updateFuelLogService = async (
+  id: string,
+  data: UpdateFuelLogSchemaType,
+) => {
+  // 1. Verify the log exists
+  const existing = await fuelLogRepository.findUnique({ id });
+
+  if (!existing) {
+    throw new AppError(STATUS_CODES.NOT_FOUND, "Fuel log not found");
+  }
+
+  // 2. Recompute totalCost if liters or costPerLiter is being updated
+  const resolvedLiters =
+    data.liters !== undefined ? data.liters : existing.liters.toNumber();
+  const resolvedCostPerLiter =
+    data.costPerLiter !== undefined
+      ? data.costPerLiter
+      : existing.costPerLiter.toNumber();
+
+  const totalCost =
+    Math.round(resolvedLiters * resolvedCostPerLiter * 100) / 100;
+
+  // 3. Persist update
+  const updated = await fuelLogRepository.update(
+    { id },
+    {
+      ...data,
+      totalCost,
+    },
+  );
+
+  // 4. Update vehicle odometer if a higher reading is supplied
+  if (
+    data.odometerAtFillKm !== undefined
+  ) {
+    const vehicle = await vehicleRepository.findUnique({
+      id: existing.vehicleId,
+    });
+
+    if (
+      vehicle &&
+      data.odometerAtFillKm > vehicle.currentOdometerKm.toNumber()
+    ) {
+      await vehicleRepository.update(
+        { id: existing.vehicleId },
+        { currentOdometerKm: data.odometerAtFillKm },
+      );
+    }
+  }
+
+  return updated;
 };

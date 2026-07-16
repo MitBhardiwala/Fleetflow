@@ -2,11 +2,14 @@ import { NextFunction, Request, Response } from "express";
 import {
   CreateDriverSchemaType,
   listDriverSchemaType,
+  UpdateDriverSchemaType,
 } from "../utils/validations";
 import {
   createDriverService,
   getDriverByIdService,
   getDriverService,
+  updateDriverService,
+  deleteDriverService,
 } from "../services/driver.service";
 import { STATUS_CODES } from "../utils/constants";
 
@@ -58,6 +61,45 @@ export const getById = async (
     res.status(STATUS_CODES.OK).json({
       succes: true,
       message: "Driver data fetched successfully",
+      data,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+export const update = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { id } = req.validatedParams as { id: string };
+
+    const data = await updateDriverService(id, req.body as UpdateDriverSchemaType);
+
+    res.status(STATUS_CODES.OK).json({
+      succes: true,
+      message: "Driver updated fetched successfully",
+      data,
+    });
+  } catch (error) {
+    next(error)
+  }
+};
+
+export const remove = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { id } = req.validatedParams as { id: string };
+
+    const data = await deleteDriverService(id);
+
+    return res.status(STATUS_CODES.OK).json({
+      success: true,
+      message: "Driver deleted successfully",
       data,
     });
   } catch (error) {

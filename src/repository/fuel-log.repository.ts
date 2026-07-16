@@ -17,6 +17,12 @@ export const fuelLogRepository = {
   findUnique: (where: Prisma.FuelLogWhereUniqueInput) => {
     return prisma.fuelLog.findUnique({ where });
   },
+  update: (
+    where: Prisma.FuelLogWhereUniqueInput,
+    data: Prisma.FuelLogUncheckedUpdateInput,
+  ) => {
+    return prisma.fuelLog.update({ where, data });
+  },
   findManyWithCount: ({ where, orderBy, include, skip, take }: FindManyParams) => {
     return prisma.$transaction([
       prisma.fuelLog.findMany({ where, orderBy, include, skip, take }),

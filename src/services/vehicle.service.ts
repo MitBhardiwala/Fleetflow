@@ -1,4 +1,4 @@
-import { Prisma } from "../../generated/prisma/client";
+import { Prisma, VehicleStatus } from "../../generated/prisma/client";
 import { vehicleRepository } from "../repository/vehicle.repository";
 import { STATUS_CODES } from "../utils/constants";
 import { AppError } from "../utils/error";
@@ -6,6 +6,7 @@ import {
   CreateVehicleSchemaType,
   GetVehicleSchemaType,
   ListVehicleSchemaType,
+  UpdateVehicleSchemaType,
 } from "../utils/validations";
 
 export const createVehicleService = async (data: CreateVehicleSchemaType) => {
@@ -90,4 +91,73 @@ export const getVehicleService = async (id: GetVehicleSchemaType["id"]) => {
   }
 
   return existingVehicle;
+};
+
+export const updateVehicleService = async (
+  id: string,
+  data: UpdateVehicleSchemaType
+) => {
+  const { status } = data;
+
+  const existing = await vehicleRepository.findUnique({ id });
+
+  if (!existing) {
+    throw new AppError(STATUS_CODES.NOT_FOUND, "Vehicle not found");
+  }
+
+  const isStatusChanging = status !== undefined && status !== existing.status;
+
+  if (isStatusChanging) {
+    // ON_TRIP is set by trip dispatch; IN_SHOP is set by maintenance creation
+    if (
+      existing.status === VehicleStatus.ON_TRIP ||
+      existing.status === VehicleStatus.IN_SHOP
+    ) {
+      throw new AppError(
+        STATUS_CODES.BAD_REQUEST,
+        "Vehicle status cannot be changed while it is on a trip or in maintenance"
+      );
+    }
+
+    if (
+      status === VehicleStatus.ON_TRIP ||
+      status === VehicleStatus.IN_SHOP
+    ) {
+      throw new AppError(
+        STATUS_CODES.BAD_REQUEST,
+        "Vehicle status cannot be manually set to ON_TRIP or IN_SHOP"
+      );
+    }
+  }
+
+  return await vehicleRepository.update({ id }, data);
+};
+
+export const deleteVehicleService = async (id: string) => {
+  const existing = await vehicleRepository.findUnique({ id });
+
+  if (!existing) {
+    throw new AppError(STATUS_CODES.NOT_FOUND, "Vehicle not found");
+  }
+
+  // ON_TRIP → active trip in progress
+  if (existing.status === VehicleStatus.ON_TRIP) {
+    throw new AppError(
+      STATUS_CODES.BAD_REQUEST,
+      "Vehicle is currently on a trip and cannot be deleted"
+    );
+  }
+
+  // IN_SHOP → active maintenance record open
+  if (existing.status === VehicleStatus.IN_SHOP) {
+    throw new AppError(
+      STATUS_CODES.BAD_REQUEST,
+      "Vehicle has an active maintenance record and cannot be deleted"
+    );
+  }
+
+  return await vehicleRepository.update(
+    { id },
+    { status: VehicleStatus.OUT_OF_SERVICE }
+  );
 };

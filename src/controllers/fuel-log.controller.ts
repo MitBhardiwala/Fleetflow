@@ -1,7 +1,16 @@
 import { NextFunction, Request, Response } from "express";
 import { STATUS_CODES } from "../utils/constants";
-import { createFuelLogService, listFuelLogsService } from "../services/fuel-log.service";
-import { CreateFuelLogSchemaType, ListFuelLogSchemaType } from "../utils/validations";
+import {
+  createFuelLogService,
+  listFuelLogsService,
+  updateFuelLogService,
+} from "../services/fuel-log.service";
+import {
+  CreateFuelLogSchemaType,
+  GetFuelLogSchemaType,
+  ListFuelLogSchemaType,
+  UpdateFuelLogSchemaType,
+} from "../utils/validations";
 
 export const create = async (
   req: Request,
@@ -33,6 +42,28 @@ export const list = async (req: Request, res: Response, next: NextFunction) => {
     return res.status(STATUS_CODES.OK).json({
       success: true,
       message: "Fuel logs listed successfully",
+      data,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const update = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { id } = req.validatedParams as GetFuelLogSchemaType;
+    const data = await updateFuelLogService(
+      id,
+      req.validatedBody as UpdateFuelLogSchemaType,
+    );
+
+    return res.status(STATUS_CODES.OK).json({
+      success: true,
+      message: "Fuel log updated successfully",
       data,
     });
   } catch (error) {

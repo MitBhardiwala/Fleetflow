@@ -7,6 +7,7 @@ import {
   CompleteMaintenanceSchemaType,
   CreateMaintenanceSchemaType,
   ListMaintenanceSchemaType,
+  UpdateMaintenanceSchemaType,
 } from "../utils/validations";
 import { VehicleStatus } from "../../generated/prisma/enums";
 import { Prisma } from "../../generated/prisma/client";
@@ -70,13 +71,36 @@ export const completeMaintenanceService = async (
       { isCompleted: true },
     ),
     vehicleRepository.update(
-      { id: '9e2bbd61-a3e0-4efd-a343-6f6e500fee03' },
+      { id: record.vehicleId },
       { status: VehicleStatus.AVAILABLE },
     ),
   ]);
 
   return updatedRecord;
 };
+
+export const updateMaintenanceService = async (
+  id: string,
+  data: UpdateMaintenanceSchemaType,
+) => {
+  const record = await maintainenceRepository.findUnique({ id });
+
+  if (!record) {
+    throw new AppError(STATUS_CODES.NOT_FOUND, "Maintenance log not found");
+  }
+
+  if (record.isCompleted) {
+    throw new AppError(
+      STATUS_CODES.CONFLICT,
+      "Cannot update a completed maintenance record",
+    );
+  }
+
+  const updated = await maintainenceRepository.update({ id }, { ...data });
+
+  return updated;
+};
+
 export const listMaintenanceService = async (
   query: ListMaintenanceSchemaType,
 ) => {

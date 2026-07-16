@@ -3,11 +3,14 @@ import {
   CreateVehicleSchemaType,
   GetVehicleSchemaType,
   ListVehicleSchemaType,
+  UpdateVehicleSchemaType,
 } from "../utils/validations";
 import {
   createVehicleService,
+  deleteVehicleService,
   getVehicleService,
   listVehicleService,
+  updateVehicleService,
 } from "../services/vehicle.service";
 import { STATUS_CODES } from "../utils/constants";
 
@@ -59,6 +62,47 @@ export const getById = async (
     return res.status(STATUS_CODES.OK).json({
       success: true,
       message: "Vehicle data fetched successfully",
+      data,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const update = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { id } = req.validatedParams as GetVehicleSchemaType;
+    const data = await updateVehicleService(
+      id,
+      req.validatedBody as UpdateVehicleSchemaType,
+    );
+
+    return res.status(STATUS_CODES.OK).json({
+      success: true,
+      message: "Vehicle updated successfully",
+      data,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const remove = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { id } = req.validatedParams as GetVehicleSchemaType;
+    const data = await deleteVehicleService(id);
+
+    return res.status(STATUS_CODES.OK).json({
+      success: true,
+      message: "Vehicle deleted successfully",
       data,
     });
   } catch (error) {

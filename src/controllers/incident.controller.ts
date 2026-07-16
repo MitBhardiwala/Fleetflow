@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { STATUS_CODES } from "../utils/constants";
-import { createIncidentService, listIncidentsService } from "../services/incident.service";
-import { CreateIncidentSchemaType, ListIncidentSchemaType } from "../utils/validations";
+import { createIncidentService, listIncidentsService, updateIncidentService } from "../services/incident.service";
+import { CreateIncidentSchemaType, GetIncidentSchemaType, ListIncidentSchemaType, UpdateIncidentSchemaType } from "../utils/validations";
 
 export const create = async (
   req: Request,
@@ -33,6 +33,28 @@ export const list = async (req: Request, res: Response, next: NextFunction) => {
     return res.status(STATUS_CODES.OK).json({
       success: true,
       message: "Incidents listed successfully",
+      data,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateIncident = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { id } = req.validatedParams as GetIncidentSchemaType;
+    const data = await updateIncidentService(
+      id,
+      req.validatedBody as UpdateIncidentSchemaType,
+    );
+
+    return res.status(STATUS_CODES.OK).json({
+      success: true,
+      message: "Incident updated successfully",
       data,
     });
   } catch (error) {

@@ -23,4 +23,7 @@ export const incidentRepository = {
       prisma.incident.count({ where }),
     ]);
   },
+  update: (where: Prisma.IncidentWhereUniqueInput, data: Prisma.IncidentUncheckedUpdateInput) => {
+    return prisma.incident.update({ where, data });
+  },
 };

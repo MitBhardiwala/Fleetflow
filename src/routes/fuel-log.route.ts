@@ -1,7 +1,12 @@
 import express from "express";
-import { create, list } from "../controllers/fuel-log.controller";
+import { create, list, update } from "../controllers/fuel-log.controller";
 import { validate } from "../middleware/validate";
-import { createFuelLogSchema, listFuelLogSchema } from "../utils/validations";
+import {
+  createFuelLogSchema,
+  getFuelLogSchema,
+  listFuelLogSchema,
+  updateFuelLogSchema,
+} from "../utils/validations";
 
 const router = express.Router();
 
@@ -19,6 +24,15 @@ router.get(
     query: listFuelLogSchema,
   }),
   list,
+);
+
+router.patch(
+  "/:id",
+  validate({
+    params: getFuelLogSchema,
+    body: updateFuelLogSchema,
+  }),
+  update,
 );
 
 export default router;

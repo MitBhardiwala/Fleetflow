@@ -13,6 +13,9 @@ export const userRepository = {
   findUnique: (where: Prisma.UserWhereUniqueInput) => {
     return prisma.user.findUnique({ where });
   },
+  findFirst: (where: Prisma.UserWhereInput) => {
+    return prisma.user.findFirst({ where });
+  },
   findMany: ({ where, orderBy, select, skip, take }: FindManyParams) => {
     return prisma.user.findMany({
       where,
@@ -39,5 +42,8 @@ export const userRepository = {
   },
   create: (data: Prisma.UserCreateInput) => {
     return prisma.user.create({ data });
+  },
+  update: (where: Prisma.UserWhereUniqueInput, data: Prisma.UserUpdateInput) => {
+    return prisma.user.update({ where, data });
   },
 };

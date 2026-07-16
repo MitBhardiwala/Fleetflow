@@ -1,7 +1,7 @@
 import express from "express";
-import { create, list } from "../controllers/incident.controller";
+import { create, list, updateIncident } from "../controllers/incident.controller";
 import { validate } from "../middleware/validate";
-import { createIncidentSchema, listIncidentSchema } from "../utils/validations";
+import { createIncidentSchema, getIncidentSchema, listIncidentSchema, updateIncidentSchema } from "../utils/validations";
 
 const router = express.Router();
 
@@ -19,6 +19,15 @@ router.get(
     query: listIncidentSchema,
   }),
   list,
+);
+
+router.patch(
+  "/:id",
+  validate({
+    params: getIncidentSchema,
+    body: updateIncidentSchema,
+  }),
+  updateIncident,
 );
 
 export default router;

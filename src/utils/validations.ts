@@ -22,12 +22,21 @@ export const createUserSchema = z.object({
 
 export type CreateUserSchemaType = z.infer<typeof createUserSchema>;
 
+export const updateUserSchema = createUserSchema.partial().refine(
+  (data) => Object.keys(data).length > 0,
+  { message: "At least one field must be provided" }
+);
+
+export type UpdateUserSchemaType = z.infer<typeof updateUserSchema>;
+
+
 export const listUserQuerySchema = paginationSchema.extend({
   page: z.coerce.number().int().positive().default(1),
   perPage: z.coerce.number().int().positive().max(100).default(10),
   search: z.string().trim().optional(),
   sortOn: z.enum(["firstName", "email", "createdAt"]).default("createdAt"),
   sortOrder: z.enum(["asc", "desc"]).default("asc"),
+  status: z.enum(["active", "inactive", "all"]).default('all')
 });
 
 export type ListUserQuerySchemaType = z.infer<typeof listUserQuerySchema>;
@@ -75,6 +84,16 @@ export const createDriverSchema = z.object({
     .optional(),
 });
 export type CreateDriverSchemaType = z.infer<typeof createDriverSchema>;
+
+export const updateDriverSchema = createDriverSchema
+  .partial()
+  .refine(
+    (data) => Object.keys(data).length > 0,
+    { message: "At least one field must be provided" }
+  );
+
+export type UpdateDriverSchemaType = z.infer<typeof updateDriverSchema>;
+
 
 export const listDriverSchema = paginationSchema.extend({
   search: z.string().trim().optional(),
@@ -142,6 +161,15 @@ export type ListVehicleSchemaType = z.infer<typeof listVehicleSchema>;
 export const getVehicleSchema = z.object({
   id: z.string().uuid("Invalid UUID format"),
 });
+
+export const updateVehicleSchema = createVehicleSchema
+  .partial()
+  .refine(
+    (data) => Object.keys(data).length > 0,
+    { message: "At least one field must be provided" }
+  );
+
+export type UpdateVehicleSchemaType = z.infer<typeof updateVehicleSchema>;
 
 const tripObjectSchema = z.object({
   vehicleId: z
@@ -363,6 +391,21 @@ export type CompleteMaintenanceSchemaType = z.infer<
   typeof completeMaintenanceSchema
 >;
 
+// vehicleId and isCompleted are intentionally excluded:
+//   - vehicleId   → cannot reassign a record to a different vehicle after creation
+//   - isCompleted → controlled exclusively by the PATCH /:id/complete endpoint
+export const updateMaintenanceSchema = createMaintenanceSchema
+  .omit({ vehicleId: true })
+  .partial()
+  .refine(
+    (data) => Object.keys(data).length > 0,
+    { message: "At least one field must be provided" },
+  );
+
+export type UpdateMaintenanceSchemaType = z.infer<
+  typeof updateMaintenanceSchema
+>;
+
 export const createFuelLogSchema = z.object({
   vehicleId: z
     .string({
@@ -400,6 +443,34 @@ export const createFuelLogSchema = z.object({
 });
 
 export type CreateFuelLogSchemaType = z.infer<typeof createFuelLogSchema>;
+
+export const getFuelLogSchema = z.object({
+  id: z.string().uuid("Invalid UUID format"),
+});
+
+export type GetFuelLogSchemaType = z.infer<typeof getFuelLogSchema>;
+
+// vehicleId and tripId are intentionally excluded — they cannot be changed after creation
+export const updateFuelLogSchema = createFuelLogSchema
+  .omit({ vehicleId: true, tripId: true })
+  .partial()
+  .refine(
+    (data) => Object.keys(data).length > 0,
+    { message: "At least one field must be provided" },
+  )
+  .refine(
+    (data) => {
+      const hasLiters = data.liters !== undefined;
+      const hasCost = data.costPerLiter !== undefined;
+      return hasLiters === hasCost; // both present or both absent
+    },
+    {
+      message: "Both liters and costPerLiter are required when updating pricing",
+      path: ["liters", "costPerLiter"],
+    },
+  );
+
+export type UpdateFuelLogSchemaType = z.infer<typeof updateFuelLogSchema>;
 
 export const listFuelLogSchema = paginationSchema.extend({
   search: z.string().trim().optional(),
@@ -442,3 +513,23 @@ export const listIncidentSchema = paginationSchema.extend({
 
 export type ListIncidentSchemaType = z.infer<typeof listIncidentSchema>;
 
+export const getIncidentSchema = z.object({
+  id: z.string().uuid("Invalid UUID format"),
+});
+
+export type GetIncidentSchemaType = z.infer<typeof getIncidentSchema>;
+
+// driverId, tripId, and severity are intentionally excluded:
+//   - driverId  → cannot reassign an incident to a different driver
+//   - tripId    → cannot change the associated trip after creation
+//   - severity  → changing severity would silently alter the stored scoreDeduction
+//                 and require reversing the driver's safety score; excluded by design
+export const updateIncidentSchema = createIncidentSchema
+  .omit({ driverId: true, tripId: true, severity: true })
+  .partial()
+  .refine(
+    (data) => Object.keys(data).length > 0,
+    { message: "At least one field must be provided" },
+  );
+
+export type UpdateIncidentSchemaType = z.infer<typeof updateIncidentSchema>;

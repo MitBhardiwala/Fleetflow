@@ -1,10 +1,11 @@
 import express from "express";
-import { create, list, completeMaintenance } from "../controllers/maintainence.controller";
+import { create, list, completeMaintenance, updateMaintenance } from "../controllers/maintainence.controller";
 import { validate } from "../middleware/validate";
 import {
   createMaintenanceSchema,
   completeMaintenanceSchema,
   listMaintainanceSchema,
+  updateMaintenanceSchema,
 } from "../utils/validations";
 
 const router = express.Router();
@@ -22,6 +23,15 @@ router.get(
     query: listMaintainanceSchema,
   }),
   list,
+);
+
+router.patch(
+  "/:id",
+  validate({
+    params: completeMaintenanceSchema,
+    body: updateMaintenanceSchema,
+  }),
+  updateMaintenance,
 );
 
 router.patch(

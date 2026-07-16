@@ -6,24 +6,29 @@ import { hashPassword } from "../utils/utils";
 import {
   CreateUserSchemaType,
   ListUserQuerySchemaType,
+  UpdateUserSchemaType,
 } from "../utils/validations";
 
 export const listUser = async (query: ListUserQuerySchemaType) => {
-  const { page, perPage, search, sortOn, sortOrder } = query;
+  const { page, perPage, search, sortOn, sortOrder, status } = query;
 
   //skip
   const skipQuery = (page - 1) * perPage;
 
   // prepare where obj
-  const whereObj: Prisma.UserWhereInput = search
-    ? {
-        OR: [
-          { firstName: { contains: search, mode: "insensitive" } },
-          { lastName: { contains: search, mode: "insensitive" } },
-          { email: { contains: search, mode: "insensitive" } },
-        ],
-      }
-    : {};
+  let whereObj: Prisma.UserWhereInput = { isActive: true };
+
+  if (search) {
+    whereObj.OR = [
+      { firstName: { contains: search, mode: "insensitive" } },
+      { lastName: { contains: search, mode: "insensitive" } },
+      { email: { contains: search, mode: "insensitive" } },
+    ]
+  };
+
+  if (status === "active" || status === "inactive") {
+    whereObj.isActive = status === "active";
+  }
 
   //prepare sort obj
   const sortByObj: Prisma.UserOrderByWithRelationInput = {
@@ -37,6 +42,7 @@ export const listUser = async (query: ListUserQuerySchemaType) => {
     lastName: true,
     email: true,
     role: true,
+    isActive: true,
     createdAt: true,
   };
 
@@ -104,4 +110,46 @@ export const createuser = async (user: CreateUserSchemaType) => {
   };
 
   return await userRepository.create(data);
+};
+
+
+export const updateUserService = async (userId: string, data: UpdateUserSchemaType) => {
+  const { email } = data;
+
+  //verify if user exists
+  const existingUser = await userRepository.findFirst({ id: userId, });
+
+  if (!existingUser) {
+    throw new AppError(STATUS_CODES.NOT_FOUND, "User does not exist")
+  }
+
+  if (email) {
+    //check if any other user with same email exists or not
+    const userWithexistingEmail = await userRepository.findFirst({ email, id: { not: userId }, })
+
+
+    if (userWithexistingEmail) {
+      throw new AppError(STATUS_CODES.CONFLICT, "User with this email already exist")
+    }
+  }
+
+
+
+  const updatedUser = await userRepository.update({ id: userId }, data);
+
+  return updatedUser;
+};
+
+export const deleteUserService = async (userId: string) => {
+  // verify if user exists
+  const existingUser = await userRepository.findUnique({ id: userId });
+
+  if (!existingUser) {
+    throw new AppError(STATUS_CODES.NOT_FOUND, "User does not exist");
+  }
+
+  // soft delete — set isActive to false
+  const deletedUser = await userRepository.update({ id: userId }, { isActive: false });
+
+  return deletedUser;
 };

@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { Prisma } from "../../generated/prisma/client";
 
 const SALT_ROUNDS = 12;
 
@@ -30,3 +31,25 @@ export const generateToken = (user: UserPayload): string => {
 
 export const generateOTP = () =>
   String(Math.floor(Math.random() * 10000)).padStart(4, "0");
+
+
+export function extractUniqueFields(err: Prisma.PrismaClientKnownRequestError): string[] {
+  const meta = err.meta as any;
+
+  // Newer driver-adapter shape (Prisma 7.x with adapters)
+  const adapterFields = meta?.driverAdapterError?.cause?.constraint?.fields;
+  if (Array.isArray(adapterFields)) {
+    return adapterFields;
+  }
+
+  // Classic shape
+  const target = meta?.target;
+  if (Array.isArray(target)) {
+    return target;
+  }
+  if (typeof target === "string") {
+    return [target];
+  }
+
+  return [];
+}
