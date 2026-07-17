@@ -3,9 +3,15 @@ import { prisma } from "./db";
 import v1Routes from "./routes/index";
 import { STATUS_CODES } from "./utils/constants";
 import { errorHandler } from "./utils/error";
+import cors from 'cors'
 
 const app = express();
 const PORT = process.env.PORT;
+
+
+app.use(cors({
+  origin: 'http://localhost:5173',
+}));
 
 app.use(express.json());
 

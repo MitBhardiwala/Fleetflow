@@ -57,7 +57,7 @@ export const listUser = async (query: ListUserQuerySchemaType) => {
   // prepare meta deta
   const totalPages = Math.ceil(totalCount / perPage);
   const meta = {
-    currenPage: page,
+    currentPage: page,
     perPage,
     totalItems: totalCount,
     totalPages,

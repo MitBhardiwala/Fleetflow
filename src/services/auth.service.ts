@@ -12,14 +12,14 @@ export const loginUserService = async (data: LoginUserSchemaType) => {
   const existingUser = await userRepository.findUnique({ email });
 
   if (!existingUser) {
-    throw new AppError(STATUS_CODES.NOT_FOUND, "No user found");
+    throw new AppError(STATUS_CODES.NOT_FOUND, "User not found");
   }
 
   // check if password is correct
   const isMatch = await verifyPassword(password, existingUser?.passwordHash);
 
   if (!isMatch) {
-    throw new AppError(STATUS_CODES.UNAUTHORIZED, "Invalid Credentials");
+    throw new AppError(STATUS_CODES.UNAUTHORIZED, "Invalid credentials");
   }
 
   // If password is correct, then sent JWT token
@@ -29,7 +29,7 @@ export const loginUserService = async (data: LoginUserSchemaType) => {
     role: existingUser.role,
   });
 
-  return token;
+  return { userData: existingUser, token };
 };
 
 export const forgotPasswordService = async (email: string) => {

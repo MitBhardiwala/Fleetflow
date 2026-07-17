@@ -116,7 +116,7 @@ export const listTripService = async (query: ListTripSchemaType) => {
   // prepare meta deta
   const totalPages = Math.ceil(totalCount / perPage);
   const meta = {
-    currenPage: page,
+    currentPage: page,
     perPage,
     totalItems: totalCount,
     totalPages,

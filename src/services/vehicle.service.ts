@@ -44,13 +44,12 @@ export const listVehicleService = async (query: ListVehicleSchemaType) => {
   }
 
   // filter for status and type
-
   if (status) {
-    whereObj.OR = [...(whereObj.OR ?? []), { status }];
+    whereObj.status = status;
   }
 
   if (type) {
-    whereObj.OR = [...(whereObj.OR ?? []), { type }];
+    whereObj.type = type;
   }
 
   //prepare sort obj
@@ -68,7 +67,7 @@ export const listVehicleService = async (query: ListVehicleSchemaType) => {
   // prepare meta deta
   const totalPages = Math.ceil(totalCount / perPage);
   const meta = {
-    currenPage: page,
+    currentPage: page,
     perPage,
     totalItems: totalCount,
     totalPages,

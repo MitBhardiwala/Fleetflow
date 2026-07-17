@@ -18,7 +18,7 @@ export const login = async (
 
     return res.status(STATUS_CODES.OK).json({
       success: true,
-      message: "User logged in successfully",
+      message: "Login successful",
       data,
     });
   } catch (error) {
