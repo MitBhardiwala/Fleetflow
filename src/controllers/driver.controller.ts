@@ -75,7 +75,7 @@ export const update = async (
   try {
     const { id } = req.validatedParams as { id: string };
 
-    const data = await updateDriverService(id, req.body as UpdateDriverSchemaType);
+    const data = await updateDriverService(id, req.validatedBody as UpdateDriverSchemaType);
 
     res.status(STATUS_CODES.OK).json({
       succes: true,

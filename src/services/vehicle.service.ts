@@ -18,7 +18,7 @@ export const createVehicleService = async (data: CreateVehicleSchemaType) => {
   if (existingVehicle) {
     throw new AppError(
       STATUS_CODES.BAD_REQUEST,
-      "Vehicle with same number plate exists",
+      "Vehicle with this license plate already exists",
     );
   }
 
@@ -86,7 +86,7 @@ export const getVehicleService = async (id: GetVehicleSchemaType["id"]) => {
   });
 
   if (!existingVehicle) {
-    throw new AppError(STATUS_CODES.NOT_FOUND, "No vehicle found");
+    throw new AppError(STATUS_CODES.NOT_FOUND, "Vehicle not found");
   }
 
   return existingVehicle;

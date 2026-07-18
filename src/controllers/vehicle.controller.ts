@@ -26,7 +26,7 @@ export const create = async (
 
     res.status(STATUS_CODES.CREATED).json({
       success: true,
-      message: "vehicle created",
+      message: "Vehicle created successfully",
       data,
     });
   } catch (error) {
@@ -41,7 +41,7 @@ export const get = async (req: Request, res: Response, next: NextFunction) => {
 
     res.status(STATUS_CODES.CREATED).json({
       success: true,
-      message: "vehicle listed successfully",
+      message: "Vehicles fetched successfully",
       data,
     });
   } catch (error) {
@@ -61,7 +61,7 @@ export const getById = async (
 
     return res.status(STATUS_CODES.OK).json({
       success: true,
-      message: "Vehicle data fetched successfully",
+      message: "Vehicle fetched successfully",
       data,
     });
   } catch (error) {
