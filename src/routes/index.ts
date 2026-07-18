@@ -30,7 +30,7 @@ router.use("/vehicle", vehicleRoutes);
 router.use("/trip", tripRoutes);
 
 //Maintenance routes
-router.use("/maintainance", maintainenceRoutes);
+router.use("/maintenance", maintainenceRoutes);
 
 //Fuel Log routes
 router.use("/fuel-logs", fuelLogRoutes);

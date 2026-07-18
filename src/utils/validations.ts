@@ -378,7 +378,7 @@ export const listMaintainanceSchema = paginationSchema.extend({
   vehicleId: z.string().uuid("Invalid UUid format").optional(),
   sortOn: z.enum(["vehicle", "cost", "createdAt"]).default("createdAt"),
   sortOrder: z.enum(["asc", "desc"]).default("asc"),
-  status: z.enum(VehicleStatus).optional(),
+  serviceType: z.enum(ServiceType).optional(),
 });
 
 export type ListMaintenanceSchemaType = z.infer<typeof listMaintainanceSchema>;
@@ -509,6 +509,7 @@ export const listIncidentSchema = paginationSchema.extend({
     .enum(["driver", "incidentDate", "severity", "createdAt"])
     .default("createdAt"),
   sortOrder: z.enum(["asc", "desc"]).default("asc"),
+  incidentType: z.enum(IncidentType).optional()
 });
 
 export type ListIncidentSchemaType = z.infer<typeof listIncidentSchema>;

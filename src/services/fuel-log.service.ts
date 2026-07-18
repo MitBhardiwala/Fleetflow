@@ -78,12 +78,7 @@ export const listFuelLogsService = async (query: ListFuelLogSchemaType) => {
   let whereObj: Prisma.FuelLogWhereInput = {};
 
   if (search) {
-    whereObj.vehicle = {
-      OR: [
-        { name: { contains: search, mode: "insensitive" } },
-        { model: { contains: search, mode: "insensitive" } },
-      ],
-    };
+    whereObj.vehicle = { name: { contains: search, mode: "insensitive" } }
   }
 
   if (vehicleId) {

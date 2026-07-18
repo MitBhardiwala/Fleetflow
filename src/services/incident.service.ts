@@ -60,7 +60,7 @@ export const createIncidentService = async (
 };
 
 export const listIncidentsService = async (query: ListIncidentSchemaType) => {
-  const { page, perPage, search, driverId, tripId, sortOn, sortOrder } = query;
+  const { page, perPage, search, driverId, tripId, sortOn, sortOrder, incidentType } = query;
 
   // skip
   const skipQuery = (page - 1) * perPage;
@@ -83,6 +83,10 @@ export const listIncidentsService = async (query: ListIncidentSchemaType) => {
 
   if (tripId) {
     whereObj.tripId = tripId;
+  }
+
+  if (incidentType) {
+    whereObj.incidentType = incidentType
   }
 
   // build orderBy

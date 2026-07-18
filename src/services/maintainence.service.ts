@@ -104,7 +104,7 @@ export const updateMaintenanceService = async (
 export const listMaintenanceService = async (
   query: ListMaintenanceSchemaType,
 ) => {
-  const { page, perPage, search, sortOn, sortOrder, vehicleId } = query;
+  const { page, perPage, search, sortOn, sortOrder, vehicleId, serviceType } = query;
 
   //skip
   const skipQuery = (page - 1) * perPage;
@@ -113,30 +113,22 @@ export const listMaintenanceService = async (
   let whereObj: Prisma.MaintenanceRecordWhereInput = {};
 
   if (search) {
-    whereObj.OR = [
-      {
-        vehicle: {
-          OR: [
-            {
-              name: {
-                contains: search,
-                mode: "insensitive",
-              },
-            },
-            {
-              model: {
-                contains: search,
-                mode: "insensitive",
-              },
-            },
-          ],
-        },
+    whereObj.vehicle =
+    {
+      name: {
+        contains: search,
+        mode: "insensitive",
       },
-    ];
+
+    }
   }
 
   if (vehicleId) {
     whereObj.vehicleId = vehicleId;
+  }
+
+  if (serviceType) {
+    whereObj.serviceType = serviceType
   }
 
   // prepare sort obj

@@ -64,7 +64,7 @@ export const getDriverService = async (query: listDriverSchemaType) => {
 
   // If status filter is there
   if (status) {
-    whereObj.OR = [...(whereObj.OR ?? []), { status }];
+    whereObj = { ...whereObj, status };
   }
 
   //prepare sort obj
