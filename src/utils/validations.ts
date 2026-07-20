@@ -62,7 +62,7 @@ export type ForgotPasswordSchemaType = z.infer<typeof forgotPasswordSchema>;
 
 export const createDriverSchema = z.object({
   firstName: z.string("First Name is required").trim().min(1).max(100),
-  lastName: z.string().trim().min(1).max(100).optional(),
+  lastName: z.string().trim().max(100).optional(),
   phone: z
     .string("Phone number is required")
     .trim()
@@ -74,14 +74,13 @@ export const createDriverSchema = z.object({
   safetyScore: z
     .number({
       error: (iss) =>
-        iss.input === undefined
+        iss.input === undefined || null
           ? "Safety score is required"
           : "Safety score must be a number",
     })
     .min(0, "Safety score cannot be negative")
     .max(100, "Safety score cannot exceed 100")
     .multipleOf(0.01, "Safety score can have at most 2 decimal places")
-    .optional(),
 });
 export type CreateDriverSchemaType = z.infer<typeof createDriverSchema>;
 
@@ -114,7 +113,7 @@ export type GetDriverSchemaType = z.infer<typeof getDriverSchema>;
 
 export const createVehicleSchema = z.object({
   name: z.string("Name is required").trim().min(1).max(100),
-  model: z.string().trim().min(1).max(100).optional(),
+  model: z.string().trim().max(100).optional(),
   licensePlate: z
     .string("License plate is required")
     .trim()
@@ -130,17 +129,21 @@ export const createVehicleSchema = z.object({
           : "Max load capacity must be a number",
     })
     .positive("Max load capacity must be positive")
+    .max(100000, "Max load capacity can be atmost 100000 Kg only")
     .multipleOf(0.01, "Max load capacity can have at most 2 decimal places"),
   currentOdometerKm: z
     .number("Odometer reading should be a number")
     .min(0, "Odometer reading cannot be negative")
+    .max(100000, "Current odometer can be at most 100000 only")
     .multipleOf(0.01, "Odometer can have at most 2 decimal places")
     .optional(),
   status: z.enum(VehicleStatus).optional(),
   acquisitionCost: z
     .number("Acquisiiton cost should be a number")
     .positive("Acquisition cost must be positive")
+    .max(100000, "Acquisition cost capacity can be at most 100000 only")
     .multipleOf(0.01, "Acquisition cost can have at most 2 decimal places")
+    .nullable()
     .optional(),
 });
 
@@ -355,7 +358,7 @@ export const createMaintenanceSchema = z.object({
     })
     .uuid("Invalid UUID format"),
   serviceType: z.enum(ServiceType),
-  description: z.string().trim().min(1).max(1000).optional(),
+  description: z.string().trim().max(1000).optional(),
   cost: z
     .number({
       error: (iss) =>
@@ -364,9 +367,10 @@ export const createMaintenanceSchema = z.object({
           : "Cost should be a number",
     })
     .nonnegative()
+    .max(100000, "Cost can be max of 100000 rupees only")
     .multipleOf(0.01),
   serviceDate: z.coerce.date("Valid service date is required"),
-  vendor: z.string().trim().min(1).max(255).optional(),
+  vendor: z.string().trim().max(255).optional(),
 });
 
 export type CreateMaintenanceSchemaType = z.infer<
@@ -438,6 +442,7 @@ export const createFuelLogSchema = z.object({
     .number("Odometer reading must be a number")
     .nonnegative("Odometer reading cannot be negative")
     .multipleOf(0.01, "Odometer can have at most 2 decimal places")
+    .nullable()
     .optional(),
   fuelDate: z.coerce.date("Valid fuel date is required"),
 });
