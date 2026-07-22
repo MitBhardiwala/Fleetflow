@@ -14,7 +14,7 @@ import { paginationSchema } from "./constants.ts";
 
 export const createUserSchema = z.object({
   firstName: z.string("First Name is required").trim().min(1).max(100),
-  lastName: z.string().trim().min(1).max(100).optional(),
+  lastName: z.string().trim().max(100).optional(),
   email: z.email("Valid email is required").max(100),
   role: z.enum(Role),
   isActive: z.boolean().optional(),
