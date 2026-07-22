@@ -16,7 +16,7 @@ export const listUser = async (query: ListUserQuerySchemaType) => {
   const skipQuery = (page - 1) * perPage;
 
   // prepare where obj
-  let whereObj: Prisma.UserWhereInput = { isActive: true };
+  let whereObj: Prisma.UserWhereInput = {};
 
   if (search) {
     whereObj.OR = [
