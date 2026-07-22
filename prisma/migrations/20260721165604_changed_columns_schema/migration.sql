@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "trips" ALTER COLUMN "revenue" DROP NOT NULL,
+ALTER COLUMN "revenue" DROP DEFAULT;

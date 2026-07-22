@@ -148,7 +148,7 @@ model Trip {
   startOdometerKm    Decimal?   @map("start_odometer_km") @db.Decimal(10, 2)
   endOdometerKm      Decimal?   @map("end_odometer_km") @db.Decimal(10, 2)
   status             TripStatus @default(DRAFT)
-  revenue            Decimal    @default(0) @db.Decimal(10, 2)
+  revenue            Decimal?   @db.Decimal(10, 2)
   cancellationReason String?    @map("cancellation_reason") @db.Text
   createdBy          String?    @map("created_by")
   createdAt          DateTime   @default(now()) @map("created_at")

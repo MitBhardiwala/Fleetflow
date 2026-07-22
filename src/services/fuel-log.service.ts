@@ -56,7 +56,7 @@ export const createFuelLogService = async (
 
   // 5. Update vehicle odometer if new reading is higher
   if (
-    data.odometerAtFillKm !== undefined &&
+    data.odometerAtFillKm !== undefined && data.odometerAtFillKm &&
     data.odometerAtFillKm > vehicle.currentOdometerKm.toNumber()
   ) {
     await vehicleRepository.update(
@@ -178,7 +178,7 @@ export const updateFuelLogService = async (
     });
 
     if (
-      vehicle &&
+      vehicle && data.odometerAtFillKm &&
       data.odometerAtFillKm > vehicle.currentOdometerKm.toNumber()
     ) {
       await vehicleRepository.update(
