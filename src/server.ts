@@ -17,7 +17,7 @@ app.use(express.json());
 
 app.get("/status", (_req: Request, res: Response) => {
   res.status(STATUS_CODES.OK).json({
-    message: "Server is running properly",
+    message: "Server is running properly !",
   });
 });
 
