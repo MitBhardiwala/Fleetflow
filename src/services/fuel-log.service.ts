@@ -1,14 +1,14 @@
-import { fuelLogRepository } from "../repository/fuel-log.repository";
-import { vehicleRepository } from "../repository/vehicle.repository";
-import { tripRepository } from "../repository/trip.repository";
-import { AppError } from "../utils/error";
-import { STATUS_CODES } from "../utils/constants";
+import { fuelLogRepository } from "../repository/fuel-log.repository.ts";
+import { vehicleRepository } from "../repository/vehicle.repository.ts";
+import { tripRepository } from "../repository/trip.repository.ts";
+import { AppError } from "../utils/error.ts";
+import { STATUS_CODES } from "../utils/constants.ts";
 import {
   CreateFuelLogSchemaType,
   ListFuelLogSchemaType,
   UpdateFuelLogSchemaType,
-} from "../utils/validations";
-import { Prisma } from "../../generated/prisma/client";
+} from "../utils/validations.ts";
+import { Prisma } from "../../generated/prisma/client.ts";
 
 export const createFuelLogService = async (
   data: CreateFuelLogSchemaType,

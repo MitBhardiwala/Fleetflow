@@ -1,27 +1,23 @@
-import { tripRepository } from "../repository/trip.repository";
+import { tripRepository } from "../repository/trip.repository.ts";
 import {
   CompleteTripSchemaType,
   CancelTripSchemaType,
   CreateTripSchemaType,
   DispatchTripSchemaType,
   ListTripSchemaType,
-} from "../utils/validations";
+} from "../utils/validations.ts";
 import {
   validateTripCompletion,
   validateTripCancellation,
   validateTripCreation,
-} from "../utils/trip.validations";
-import {
-  DriverStatus,
-  Prisma,
-  TripStatus,
-  VehicleStatus,
-} from "../../generated/prisma/client";
-import { driverRepository } from "../repository/driver.repository";
-import { vehicleRepository } from "../repository/vehicle.repository";
-import { AppError } from "../utils/error";
-import { STATUS_CODES } from "../utils/constants";
-import { prisma } from "../db";
+} from "../utils/trip.validations.ts";
+import { Prisma } from "../../generated/prisma/client.ts";
+import { driverRepository } from "../repository/driver.repository.ts";
+import { vehicleRepository } from "../repository/vehicle.repository.ts";
+import { AppError } from "../utils/error.ts";
+import { STATUS_CODES } from "../utils/constants.ts";
+import { prisma } from "../db.ts";
+import { DriverStatus, TripStatus, VehicleStatus } from "../../generated/prisma/enums.ts";
 
 export const createTripService = async (data: CreateTripSchemaType) => {
   const { vehicleId, driverId } = data;
@@ -186,7 +182,7 @@ export const completeTripService = async (
     data,
   );
 
-  return prisma.$transaction(async (tx) => {
+  return prisma.$transaction(async (tx: Prisma.TransactionClient) => {
     const completedTrip = await tx.trip.update({
       where: { id: tripId },
       data: {
@@ -228,7 +224,7 @@ export const cancelTripService = async (
 ) => {
   const existingTrip = await validateTripCancellation(tripId);
   const cancellationReason = data.cancellationReason;
-  return prisma.$transaction(async (tx) => {
+  return prisma.$transaction(async (tx: Prisma.TransactionClient) => {
     const cancelledTrip = await tx.trip.update({
       where: { id: tripId },
       data: {

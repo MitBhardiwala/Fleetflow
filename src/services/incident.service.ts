@@ -1,11 +1,11 @@
-import { prisma } from "../db";
-import { AppError } from "../utils/error";
-import { SCORE_DEDUCTION, STATUS_CODES } from "../utils/constants";
-import { CreateIncidentSchemaType, ListIncidentSchemaType, UpdateIncidentSchemaType } from "../utils/validations";
-import { Prisma } from "../../generated/prisma/client";
-import { incidentRepository } from "../repository/incident.repository";
-import { driverRepository } from "../repository/driver.repository";
-import { tripRepository } from "../repository/trip.repository";
+import { prisma } from "../db.ts";
+import { AppError } from "../utils/error.ts";
+import { SCORE_DEDUCTION, STATUS_CODES } from "../utils/constants.ts";
+import { CreateIncidentSchemaType, ListIncidentSchemaType, UpdateIncidentSchemaType } from "../utils/validations.ts";
+import { Prisma } from "../../generated/prisma/client.ts";
+import { incidentRepository } from "../repository/incident.repository.ts";
+import { driverRepository } from "../repository/driver.repository.ts";
+import { tripRepository } from "../repository/trip.repository.ts";
 
 export const createIncidentService = async (
   data: CreateIncidentSchemaType,

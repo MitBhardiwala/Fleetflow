@@ -9,8 +9,8 @@ import {
   VehicleType,
   IncidentType,
   Severity,
-} from "../../generated/prisma/enums";
-import { paginationSchema } from "./constants";
+} from "../../generated/prisma/enums.ts";
+import { paginationSchema } from "./constants.ts";
 
 export const createUserSchema = z.object({
   firstName: z.string("First Name is required").trim().min(1).max(100),

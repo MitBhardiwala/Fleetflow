@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { STATUS_CODES } from "../utils/constants";
-import { createIncidentService, listIncidentsService, updateIncidentService } from "../services/incident.service";
-import { CreateIncidentSchemaType, GetIncidentSchemaType, ListIncidentSchemaType, UpdateIncidentSchemaType } from "../utils/validations";
+import { STATUS_CODES } from "../utils/constants.ts";
+import { createIncidentService, listIncidentsService, updateIncidentService } from "../services/incident.service.ts";
+import { CreateIncidentSchemaType, GetIncidentSchemaType, ListIncidentSchemaType, UpdateIncidentSchemaType } from "../utils/validations.ts";
 
 export const create = async (
   req: Request,

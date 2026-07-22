@@ -1,12 +1,12 @@
 import express from "express";
-import { create, list, completeMaintenance, updateMaintenance } from "../controllers/maintainence.controller";
-import { validate } from "../middleware/validate";
+import { create, list, completeMaintenance, updateMaintenance } from "../controllers/maintainence.controller.ts";
+import { validate } from "../middleware/validate.ts";
 import {
   createMaintenanceSchema,
   completeMaintenanceSchema,
   listMaintainanceSchema,
   updateMaintenanceSchema,
-} from "../utils/validations";
+} from "../utils/validations.ts";
 
 const router = express.Router();
 

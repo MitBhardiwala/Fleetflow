@@ -1,9 +1,9 @@
-import { userRepository } from "../repository/user.repository";
-import { STATUS_CODES } from "../utils/constants";
-import { sendEmail } from "../utils/email";
-import { AppError } from "../utils/error";
-import { generateOTP, generateToken, verifyPassword } from "../utils/utils";
-import { LoginUserSchemaType } from "../utils/validations";
+import { userRepository } from "../repository/user.repository.ts";
+import { STATUS_CODES } from "../utils/constants.ts";
+import { sendEmail } from "../utils/email.ts";
+import { AppError } from "../utils/error.ts";
+import { generateOTP, generateToken, verifyPassword } from "../utils/utils.ts";
+import { LoginUserSchemaType } from "../utils/validations.ts";
 
 export const loginUserService = async (data: LoginUserSchemaType) => {
   const { email, password } = data;

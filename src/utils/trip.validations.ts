@@ -1,11 +1,11 @@
-import { Driver, TripStatus, Vehicle } from "../../generated/prisma/client";
-import { DriverStatus, VehicleStatus } from "../../generated/prisma/enums";
-import { driverRepository } from "../repository/driver.repository";
-import { tripRepository } from "../repository/trip.repository";
-import { vehicleRepository } from "../repository/vehicle.repository";
-import { STATUS_CODES } from "../utils/constants";
-import { AppError } from "../utils/error";
-import { CompleteTripSchemaType } from "./validations";
+import { Driver, Vehicle } from "../../generated/prisma/client.ts";
+import { DriverStatus, TripStatus, VehicleStatus } from "../../generated/prisma/enums.ts";
+import { driverRepository } from "../repository/driver.repository.ts";
+import { tripRepository } from "../repository/trip.repository.ts";
+import { vehicleRepository } from "../repository/vehicle.repository.ts";
+import { STATUS_CODES } from "../utils/constants.ts";
+import { AppError } from "../utils/error.ts";
+import { CompleteTripSchemaType } from "./validations.ts";
 
 export const validateVehicleAvailability = (vehicle: Vehicle) => {
   if (vehicle.status !== VehicleStatus.AVAILABLE) {

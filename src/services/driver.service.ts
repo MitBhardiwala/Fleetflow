@@ -1,12 +1,13 @@
-import { DriverStatus, Prisma } from "../../generated/prisma/client";
-import { driverRepository } from "../repository/driver.repository";
-import { STATUS_CODES } from "../utils/constants";
-import { AppError } from "../utils/error";
+import { Prisma } from "../../generated/prisma/client.ts";
+import { DriverStatus } from "../../generated/prisma/enums.ts";
+import { driverRepository } from "../repository/driver.repository.ts";
+import { STATUS_CODES } from "../utils/constants.ts";
+import { AppError } from "../utils/error.ts";
 import {
   CreateDriverSchemaType,
   listDriverSchemaType,
   UpdateDriverSchemaType,
-} from "../utils/validations";
+} from "../utils/validations.ts";
 
 export const createDriverService = async (data: CreateDriverSchemaType) => {
   const {

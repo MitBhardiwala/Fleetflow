@@ -1,14 +1,14 @@
 import express from "express";
-import authRoutes from "./auth.route";
-import userRoutes from "./user.route";
-import driverRoutes from "./driver.route";
-import vehicleRoutes from "./vehicle.route";
-import tripRoutes from "./trip.route";
-import maintainenceRoutes from "./maintainence.route";
-import fuelLogRoutes from "./fuel-log.route";
-import incidentRoutes from "./incident.route";
-import analyticsRoutes from "./analytics.route";
-import { authenticateToken } from "../middleware/authenticate";
+import authRoutes from "./auth.route.ts";
+import userRoutes from "./user.route.ts";
+import driverRoutes from "./driver.route.ts";
+import vehicleRoutes from "./vehicle.route.ts";
+import tripRoutes from "./trip.route.ts";
+import maintainenceRoutes from "./maintainence.route.ts";
+import fuelLogRoutes from "./fuel-log.route.ts";
+import incidentRoutes from "./incident.route.ts";
+import analyticsRoutes from "./analytics.route.ts";
+import { authenticateToken } from "../middleware/authenticate.ts";
 
 const router = express.Router();
 

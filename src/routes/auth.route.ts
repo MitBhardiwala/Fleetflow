@@ -1,7 +1,7 @@
 import express from "express";
-import { validate } from "../middleware/validate";
-import { forgotPasswordSchema, loginUserSchema } from "../utils/validations";
-import { login, forgotPassword } from "../controllers/auth.controller";
+import { validate } from "../middleware/validate.ts";
+import { forgotPasswordSchema, loginUserSchema } from "../utils/validations.ts";
+import { login, forgotPassword } from "../controllers/auth.controller.ts";
 
 const router = express.Router();
 

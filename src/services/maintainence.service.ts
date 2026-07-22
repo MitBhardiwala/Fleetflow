@@ -1,16 +1,16 @@
-import { maintainenceRepository } from "../repository/maintainence.repository";
-import { vehicleRepository } from "../repository/vehicle.repository";
-import { prisma } from "../db";
-import { AppError } from "../utils/error";
-import { STATUS_CODES } from "../utils/constants";
+import { maintainenceRepository } from "../repository/maintainence.repository.ts";
+import { vehicleRepository } from "../repository/vehicle.repository.ts";
+import { prisma } from "../db.ts";
+import { AppError } from "../utils/error.ts";
+import { STATUS_CODES } from "../utils/constants.ts";
 import {
   CompleteMaintenanceSchemaType,
   CreateMaintenanceSchemaType,
   ListMaintenanceSchemaType,
   UpdateMaintenanceSchemaType,
-} from "../utils/validations";
-import { VehicleStatus } from "../../generated/prisma/enums";
-import { Prisma } from "../../generated/prisma/client";
+} from "../utils/validations.ts";
+import { VehicleStatus } from "../../generated/prisma/enums.ts";
+import { Prisma } from "../../generated/prisma/client.ts";
 
 export const createMaintenanceService = async (
   data: CreateMaintenanceSchemaType,

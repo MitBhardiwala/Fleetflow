@@ -2,9 +2,9 @@ import { NextFunction, Request, Response } from "express";
 import {
   forgotPasswordService,
   loginUserService,
-} from "../services/auth.service";
-import { STATUS_CODES } from "../utils/constants";
-import { LoginUserSchemaType } from "../utils/validations";
+} from "../services/auth.service.ts";
+import { STATUS_CODES } from "../utils/constants.ts";
+import { LoginUserSchemaType } from "../utils/validations.ts";
 
 export const login = async (
   req: Request,

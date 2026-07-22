@@ -1,13 +1,14 @@
-import { Prisma, VehicleStatus } from "../../generated/prisma/client";
-import { vehicleRepository } from "../repository/vehicle.repository";
-import { STATUS_CODES } from "../utils/constants";
-import { AppError } from "../utils/error";
+import { Prisma } from "../../generated/prisma/client.ts";
+import { VehicleStatus } from "../../generated/prisma/enums.ts";
+import { vehicleRepository } from "../repository/vehicle.repository.ts";
+import { STATUS_CODES } from "../utils/constants.ts";
+import { AppError } from "../utils/error.ts";
 import {
   CreateVehicleSchemaType,
   GetVehicleSchemaType,
   ListVehicleSchemaType,
   UpdateVehicleSchemaType,
-} from "../utils/validations";
+} from "../utils/validations.ts";
 
 export const createVehicleService = async (data: CreateVehicleSchemaType) => {
   //check if any vehicle if same licenPlate exists or not

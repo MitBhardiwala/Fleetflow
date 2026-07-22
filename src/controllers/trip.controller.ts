@@ -1,19 +1,19 @@
 import { NextFunction, Request, Response } from "express";
-import { STATUS_CODES } from "../utils/constants";
+import { STATUS_CODES } from "../utils/constants.ts";
 import {
   cancelTripService,
   completeTripService,
   createTripService,
   dispatchTripService,
   listTripService,
-} from "../services/trip.service";
+} from "../services/trip.service.ts";
 import {
   CompleteTripSchemaType,
   CancelTripSchemaType,
   CreateTripSchemaType,
   DispatchTripSchemaType,
   ListTripSchemaType,
-} from "../utils/validations";
+} from "../utils/validations.ts";
 
 export const create = async (
   req: Request,

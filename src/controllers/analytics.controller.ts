@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from "express";
-import { STATUS_CODES } from "../utils/constants";
+import { STATUS_CODES } from "../utils/constants.ts";
 import {
   getDashboardStatsService,
   getFuelEfficiencyService,
   getVehicleROIService,
-} from "../services/analytics.service";
+} from "../services/analytics.service.ts";
 
 
 export const getDashboardStats = async (

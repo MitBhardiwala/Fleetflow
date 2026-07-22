@@ -3,7 +3,7 @@ import {
   getDashboardStats,
   getFuelEfficiency,
   getVehicleROI,
-} from "../controllers/analytics.controller";
+} from "../controllers/analytics.controller.ts";
 
 const router = express.Router();
 

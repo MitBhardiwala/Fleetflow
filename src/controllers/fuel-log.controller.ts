@@ -1,16 +1,16 @@
 import { NextFunction, Request, Response } from "express";
-import { STATUS_CODES } from "../utils/constants";
+import { STATUS_CODES } from "../utils/constants.ts";
 import {
   createFuelLogService,
   listFuelLogsService,
   updateFuelLogService,
-} from "../services/fuel-log.service";
+} from "../services/fuel-log.service.ts";
 import {
   CreateFuelLogSchemaType,
   GetFuelLogSchemaType,
   ListFuelLogSchemaType,
   UpdateFuelLogSchemaType,
-} from "../utils/validations";
+} from "../utils/validations.ts";
 
 export const create = async (
   req: Request,

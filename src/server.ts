@@ -1,8 +1,8 @@
 import express, { Request, Response } from "express";
-import { prisma } from "./db";
-import v1Routes from "./routes/index";
-import { STATUS_CODES } from "./utils/constants";
-import { errorHandler } from "./utils/error";
+import { prisma } from "./db.ts";
+import v1Routes from "./routes/index.ts";
+import { STATUS_CODES } from "./utils/constants.ts";
+import { errorHandler } from "./utils/error.ts";
 import cors from 'cors'
 
 const app = express();

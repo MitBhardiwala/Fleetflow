@@ -1,6 +1,6 @@
-import { Prisma } from "../../generated/prisma/client";
+import { Prisma } from "../../generated/prisma/client.ts";
 
-import { prisma } from "../db";
+import { prisma } from "../db.ts";
 
 interface FindManyParams {
   where?: Prisma.DriverWhereInput;

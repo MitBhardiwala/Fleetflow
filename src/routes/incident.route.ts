@@ -1,7 +1,7 @@
 import express from "express";
-import { create, list, updateIncident } from "../controllers/incident.controller";
-import { validate } from "../middleware/validate";
-import { createIncidentSchema, getIncidentSchema, listIncidentSchema, updateIncidentSchema } from "../utils/validations";
+import { create, list, updateIncident } from "../controllers/incident.controller.ts";
+import { validate } from "../middleware/validate.ts";
+import { createIncidentSchema, getIncidentSchema, listIncidentSchema, updateIncidentSchema } from "../utils/validations.ts";
 
 const router = express.Router();
 

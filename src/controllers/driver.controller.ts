@@ -3,15 +3,15 @@ import {
   CreateDriverSchemaType,
   listDriverSchemaType,
   UpdateDriverSchemaType,
-} from "../utils/validations";
+} from "../utils/validations.ts";
 import {
   createDriverService,
   getDriverByIdService,
   getDriverService,
   updateDriverService,
   deleteDriverService,
-} from "../services/driver.service";
-import { STATUS_CODES } from "../utils/constants";
+} from "../services/driver.service.ts";
+import { STATUS_CODES } from "../utils/constants.ts";
 
 export const create = async (
   req: Request,

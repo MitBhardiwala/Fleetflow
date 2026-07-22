@@ -1,12 +1,12 @@
 import express from "express";
-import { create, list, update } from "../controllers/fuel-log.controller";
-import { validate } from "../middleware/validate";
+import { create, list, update } from "../controllers/fuel-log.controller.ts";
+import { validate } from "../middleware/validate.ts";
 import {
   createFuelLogSchema,
   getFuelLogSchema,
   listFuelLogSchema,
   updateFuelLogSchema,
-} from "../utils/validations";
+} from "../utils/validations.ts";
 
 const router = express.Router();
 

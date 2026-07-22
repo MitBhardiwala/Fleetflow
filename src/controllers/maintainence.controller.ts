@@ -1,17 +1,17 @@
 import { NextFunction, Request, Response } from "express";
-import { STATUS_CODES } from "../utils/constants";
+import { STATUS_CODES } from "../utils/constants.ts";
 import {
   createMaintenanceService,
   completeMaintenanceService,
   listMaintenanceService,
   updateMaintenanceService,
-} from "../services/maintainence.service";
+} from "../services/maintainence.service.ts";
 import {
   CompleteMaintenanceSchemaType,
   CreateMaintenanceSchemaType,
   ListMaintenanceSchemaType,
   UpdateMaintenanceSchemaType,
-} from "../utils/validations";
+} from "../utils/validations.ts";
 
 export const create = async (
   req: Request,

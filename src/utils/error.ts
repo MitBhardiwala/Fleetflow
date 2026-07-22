@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import { STATUS_CODES, UNIQUE_FIELD_MESSAGES } from "./constants";
-import { Prisma } from "../../generated/prisma/client";
-import { extractUniqueFields } from "./utils";
+import { STATUS_CODES, UNIQUE_FIELD_MESSAGES } from "./constants.ts";
+import { Prisma } from "../../generated/prisma/client.ts";
+import { extractUniqueFields } from "./utils.ts";
 
 
 export class AppError extends Error {

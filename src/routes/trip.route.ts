@@ -6,8 +6,8 @@ import {
   dispatchTripById,
   completeTripById,
   list,
-} from "../controllers/trip.controller";
-import { validate } from "../middleware/validate";
+} from "../controllers/trip.controller.ts";
+import { validate } from "../middleware/validate.ts";
 import {
   createTripSchema,
   cancelTripSchema,
@@ -15,7 +15,7 @@ import {
   dispatchTripSchema,
   getTripSchema,
   listTripSchema,
-} from "../utils/validations";
+} from "../utils/validations.ts";
 
 const router = express.Router();
 

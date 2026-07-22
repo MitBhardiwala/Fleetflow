@@ -1,5 +1,5 @@
-import { vehicleRepository } from "../repository/vehicle.repository";
-import { tripRepository } from "../repository/trip.repository";
+import { vehicleRepository } from "../repository/vehicle.repository.ts";
+import { tripRepository } from "../repository/trip.repository.ts";
 
 type vehicleForFuelEfficiency = {
   id: string;
@@ -138,7 +138,7 @@ export const getVehicleROIService = async () => {
       totalMaintenanceCost,
       totalFuelCost,
       netProfit,
-      roi, 
+      roi,
     };
   });
 };

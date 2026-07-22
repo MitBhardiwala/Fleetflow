@@ -4,15 +4,15 @@ import {
   GetVehicleSchemaType,
   ListVehicleSchemaType,
   UpdateVehicleSchemaType,
-} from "../utils/validations";
+} from "../utils/validations.ts";
 import {
   createVehicleService,
   deleteVehicleService,
   getVehicleService,
   listVehicleService,
   updateVehicleService,
-} from "../services/vehicle.service";
-import { STATUS_CODES } from "../utils/constants";
+} from "../services/vehicle.service.ts";
+import { STATUS_CODES } from "../utils/constants.ts";
 
 export const create = async (
   req: Request,

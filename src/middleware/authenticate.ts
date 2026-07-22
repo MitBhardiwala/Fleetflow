@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { AppError } from "../utils/error";
-import { STATUS_CODES } from "../utils/constants";
+import { AppError } from "../utils/error.ts";
+import { STATUS_CODES } from "../utils/constants.ts";
 import jwt from "jsonwebtoken";
-import { userRepository } from "../repository/user.repository";
+import { userRepository } from "../repository/user.repository.ts";
 
 export const authenticateToken = async (
   req: Request,

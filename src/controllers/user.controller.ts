@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from "express";
-import { createuser, getUser, listUser, updateUserService, deleteUserService } from "../services/user.services";
-import { STATUS_CODES } from "../utils/constants";
+import { createuser, getUser, listUser, updateUserService, deleteUserService } from "../services/user.services.ts";
+import { STATUS_CODES } from "../utils/constants.ts";
 import {
   CreateUserSchemaType,
   ListUserQuerySchemaType,
   UpdateUserSchemaType,
-} from "../utils/validations";
+} from "../utils/validations.ts";
 
 export const create = async (
   req: Request,

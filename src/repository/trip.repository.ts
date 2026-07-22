@@ -1,6 +1,5 @@
-import { Prisma } from "../../generated/prisma/client";
-import { TripUpdateInput } from "../../generated/prisma/models";
-import { prisma } from "../db";
+import { Prisma } from "../../generated/prisma/client.ts";
+import { prisma } from "../db.ts";
 
 interface FindManyParams {
   where?: Prisma.TripWhereInput;
@@ -42,7 +41,7 @@ export const tripRepository = {
       prisma.trip.count({ where }),
     ]);
   },
-  update: (where: Prisma.TripWhereUniqueInput, data: TripUpdateInput) => {
+  update: (where: Prisma.TripWhereUniqueInput, data: Prisma.TripUpdateInput) => {
     return prisma.trip.update({ where, data });
   },
 };

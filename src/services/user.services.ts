@@ -1,13 +1,13 @@
-import { Prisma } from "../../generated/prisma/client";
-import { userRepository } from "../repository/user.repository";
-import { STATUS_CODES, TEMP_PASSWORD } from "../utils/constants";
-import { AppError } from "../utils/error";
-import { hashPassword } from "../utils/utils";
+import { Prisma } from "../../generated/prisma/client.ts";
+import { userRepository } from "../repository/user.repository.ts";
+import { STATUS_CODES, TEMP_PASSWORD } from "../utils/constants.ts";
+import { AppError } from "../utils/error.ts";
+import { hashPassword } from "../utils/utils.ts";
 import {
   CreateUserSchemaType,
   ListUserQuerySchemaType,
   UpdateUserSchemaType,
-} from "../utils/validations";
+} from "../utils/validations.ts";
 
 export const listUser = async (query: ListUserQuerySchemaType) => {
   const { page, perPage, search, sortOn, sortOrder, status } = query;

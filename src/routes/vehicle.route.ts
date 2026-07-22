@@ -1,12 +1,12 @@
 import express from "express";
-import { validate } from "../middleware/validate";
+import { validate } from "../middleware/validate.ts";
 import {
   createVehicleSchema,
   getVehicleSchema,
   listVehicleSchema,
   updateVehicleSchema,
-} from "../utils/validations";
-import { create, get, getById, remove, update } from "../controllers/vehicle.controller";
+} from "../utils/validations.ts";
+import { create, get, getById, remove, update } from "../controllers/vehicle.controller.ts";
 
 const router = express.Router();
 

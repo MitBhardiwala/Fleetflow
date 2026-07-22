@@ -1,5 +1,5 @@
-import { Prisma } from "../../generated/prisma/client";
-import { prisma } from "../db";
+import { Prisma } from "../../generated/prisma/client.ts";
+import { prisma } from "../db.ts";
 
 interface FindManyParams {
   where?: Prisma.IncidentWhereInput;
