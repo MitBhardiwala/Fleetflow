@@ -29,7 +29,11 @@ export const loginUserService = async (data: LoginUserSchemaType) => {
     role: existingUser.role,
   });
 
-  return { userData: existingUser, token };
+  // remover password Hash from user data
+
+  const { passwordHash, ...userData } = existingUser
+
+  return { userData, token };
 };
 
 export const forgotPasswordService = async (email: string) => {

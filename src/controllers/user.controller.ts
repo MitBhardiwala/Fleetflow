@@ -85,3 +85,17 @@ export const remove = async (req: Request, res: Response, next: NextFunction) =>
     next(error);
   }
 };
+export const getMe = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+
+    const data = await getUser(req.user.userId);
+
+    return res.status(STATUS_CODES.OK).json({
+      success: true,
+      message: "User fetched successfully",
+      data
+    });
+  } catch (error) {
+    next(error);
+  }
+};
